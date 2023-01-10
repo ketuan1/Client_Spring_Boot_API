@@ -19,8 +19,8 @@ function App() {
       ...prevState,
       {
         id: prevState.length + 1,
-        name: "products" + (prevState.length + 1),
-        description: "desc products" + (prevState.length + 1),
+        name: "product" + (prevState.length + 1),
+        description: "desc product" + (prevState.length + 1),
         unitPrice: 11.11 * (prevState.length + 1),
         imageUrl: 'NONE',
         brand: 'NA',
