@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Product } from "../model/product";
 import Catalog from "../features/catalog/Catalog";
+import { Typography } from "@mui/material";
 
 
 function App() {
@@ -32,10 +33,10 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <h1>My Shops</h1>
+    <>
+      <Typography variant="h3">My Shops</Typography>
       <Catalog products={products} onAddProduct={addProduct} />
-    </div>
+    </>
   );
 }
 
