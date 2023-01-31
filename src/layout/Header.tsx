@@ -1,5 +1,5 @@
 import { ShoppingCart } from "@mui/icons-material";
-import { AppBar, Switch, Toolbar, Typography, ListItem, List } from "@mui/material";
+import { AppBar, Switch, Toolbar, Typography, ListItem, List, Box } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import IconButton from "@mui/material/IconButton";
 import { NavLink } from "react-router-dom";
@@ -23,9 +23,8 @@ function Header(props: Props) {
         { title: 'register', path: '/register' },
     ];
 
-    const styleNav = {
-        color: 'inherit', '&hover': { color: 'grey.500' }, '&.active': { color: 'text.secondary' }, textDecoration: 'none'
-
+    const stylesNav = {
+        color: 'inherit', '&:hover': { color: 'grey.500' }, '&.active': { color: 'text.secondary' },
     }
 
     //function
@@ -34,13 +33,17 @@ function Header(props: Props) {
     }
     return ( 
         <AppBar position="static" sx={{mb:4}}>
-            <Toolbar>
+            <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <Typography variant="h6" component={NavLink} to='/'>My Shop</Typography>
                 <Switch
                     checked={props.darkMore}
                     onChange={handleChange}
                     inputProps={{'aria-label':'controlled'}}
                 />
+                </Box>
+                
                 <List sx={{display: "flex"}}>
                     {midLinks.map(({ title, path }) => {
                         return (
@@ -48,7 +51,7 @@ function Header(props: Props) {
                                 component={NavLink}
                                 to={path}
                                 key={path}
-                                sx={{styleNav}}
+                                sx={stylesNav}
                             >
                                 {title.toUpperCase()}
                             </ListItem>
@@ -56,6 +59,7 @@ function Header(props: Props) {
                     })}
                 </List>
 
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <IconButton size="large" sx={{color: 'inherit'}}>
                 <Badge badgeContent={4} color="secondary">
                         <ShoppingCart sx={{ color: 'red' }} />
@@ -69,14 +73,14 @@ function Header(props: Props) {
                                 component={NavLink}
                                 to={path}
                                 key={path}
-                                sx={{styleNav}}
+                                sx={stylesNav}
                             >
                                 {title.toUpperCase()}
                             </ListItem>
                         )
                     })}
                 </List>
-
+                </Box>
             </Toolbar>
        </AppBar>
      );
