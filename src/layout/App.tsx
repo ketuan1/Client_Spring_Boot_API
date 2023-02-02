@@ -9,6 +9,7 @@ import AboutPage from "../features/about/AboutPage";
 import Contact from "../features/contact/Contact";
 import Uploader from "../features/upload/uploader";
 import { Route, Routes } from 'react-router-dom';
+import ProductDetail from "../features/catalog/ProductDetail";
 
 function App() {
 
@@ -29,7 +30,7 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='catalog' element={<Catalog />} />
-            <Route path='catalog/:productId' element={<Catalog />} />
+            <Route path='catalog/:productId' element={<ProductDetail />} />
             <Route path='about' element={<AboutPage />} />
             <Route path='contact' element={<Contact />} />
             <Route path='upload' element={<Uploader />} />
