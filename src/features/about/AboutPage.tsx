@@ -1,8 +1,11 @@
-import {Button, ButtonGroup, Typography} from "@mui/material";
+import {Alert, AlertTitle, Button, ButtonGroup, List, ListItem, ListItemText, Typography} from "@mui/material";
 import { Container } from "@mui/system";
 import axios from "axios";
+import { useState } from "react";
 
 function AboutPage() {
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
     return ( 
         <Container>
             <Typography>
@@ -17,13 +20,29 @@ function AboutPage() {
                 </Button>
 
                 <Button variant="contained" onClick={() => axios.get('buggy/404').then(response => console.log(response.data))}>
-                    Test Validation Error
+                    Test Validation Error 400
                 </Button>
 
                 <Button variant="contained" onClick={() => axios.get('buggy/500').then(response => console.log(response.data))}>
-                    Test Validation Error
+                    Test Validation Error 500
                 </Button>
             </ButtonGroup>
+
+            {
+                validationErrors.length > 0 &&
+                <Alert security="error">
+                        <AlertTitle>Validation Errors</AlertTitle>
+                        <List>
+                            {validationErrors.map((error) => {
+                                return (
+                                    <ListItem key={error}>
+                                        <ListItemText>{error}</ListItemText>
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+                </Alert>
+            }
 
         </Container>
      );

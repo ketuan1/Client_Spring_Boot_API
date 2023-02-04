@@ -10,6 +10,7 @@ import Contact from "../features/contact/Contact";
 import Uploader from "../features/upload/uploader";
 import { Route, Routes } from 'react-router-dom';
 import ProductDetail from "../features/catalog/ProductDetail";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 
@@ -24,6 +25,9 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
+
+        <ToastContainer position="bottom-right" hideProgressBar />
+
       <CssBaseline />
       <Header onSetDarkMore={setDarkMore} darkMore={darkMore} />
         <Container>
