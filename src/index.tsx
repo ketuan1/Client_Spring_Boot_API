@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 //SETTING URL for API
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 
+//chuyen page -> use Hook useNavigate()
+
 axios.interceptors.response.use(response => {
   return response;
 }, (error: AxiosError<any>) => {

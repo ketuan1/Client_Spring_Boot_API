@@ -1,7 +1,8 @@
-import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingComponent from "../../layout/Loading";
 import { Product } from "../../model/product";
 
 function ProductDetail() {
@@ -11,6 +12,8 @@ function ProductDetail() {
     const [product, setProduct] = useState<Product | null>(null);
     //loading network
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     //axios
     useEffect(() => {
@@ -22,7 +25,7 @@ function ProductDetail() {
     }, [params.productId]);
     
     if (loading) {
-        return <h3>Loading</h3>
+        return <LoadingComponent />
     }
 
     if (!product)
@@ -32,7 +35,7 @@ function ProductDetail() {
     return ( 
         <Grid container spacing={6}>
             <Grid item xs={4}>
-                <img src={`${process.env.REACT_APP_BASE_URL}/file/image/${product?.imageUrl}`} alt={`$product?.name}`} style={{width: '100%'}}/>
+                <img src={`http://localhost:8080/api/file/image/${product?.imageUrl}`} alt={`$product?.name}`} style={{width: '100%'}}/>
             </Grid>
             <Grid item xs={8}>
                 <Typography variant="h3">{product?.name}</Typography>
@@ -65,6 +68,7 @@ function ProductDetail() {
                     </Table>
                 </TableContainer>
             </Grid>
+            <Button onClick={() => navigate(-1)}>GO BACK</Button>
         </Grid>
      );
 }

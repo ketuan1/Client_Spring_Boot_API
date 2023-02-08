@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import LoadingComponent from "../../layout/Loading";
 import { Product } from "../../model/product";
 import ProductList from "./ProductList";
 
@@ -10,6 +11,9 @@ function Catalog() {
 
   const [products, setProducts] = useState<Product[]>([]);
 
+  //loading
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     //fetch js core
     // fetch("http://localhost:8080/api/products")
@@ -17,8 +21,15 @@ function Catalog() {
     //   .then((data) => setProducts(data));
     
     //axios fetch API
-    axios.get("products").then((response: AxiosResponse) => setProducts(response.data));
+    axios.get("products")
+      .then((response: AxiosResponse) => setProducts(response.data))
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return <LoadingComponent />
+  }
+  
   return (
     <>
       <ProductList products={products} />

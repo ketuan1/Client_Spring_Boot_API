@@ -15,7 +15,13 @@ function AboutPage() {
                 <Button variant="contained" onClick={() => axios.post('buggy/validate-error', {
                     "name": "",
                     "email": "test"
-                }).then(response => console.log(response.data)).catch(error  => console.log(error))}>
+                })
+                    .then(response => console.log(response.data))
+                    .catch(error => {
+                        console.log(error);
+                        setValidationErrors(error);
+                        
+                    })}>
                     Test Validation Error
                 </Button>
 
@@ -33,13 +39,11 @@ function AboutPage() {
                 <Alert security="error">
                         <AlertTitle>Validation Errors</AlertTitle>
                         <List>
-                            {validationErrors.map((error) => {
-                                return (
+                            {validationErrors.map((error) => (
                                     <ListItem key={error}>
                                         <ListItemText>{error}</ListItemText>
                                     </ListItem>
-                                )
-                            })}
+                                ))}
                         </List>
                 </Alert>
             }

@@ -11,6 +11,8 @@ import Uploader from "../features/upload/uploader";
 import { Route, Routes } from 'react-router-dom';
 import ProductDetail from "../features/catalog/ProductDetail";
 import { ToastContainer } from "react-toastify";
+import AxiosInterceptor from "../interceptor/AxiosInterceptor";
+import NotFound from "../features/error/NotFound";
 
 function App() {
 
@@ -25,22 +27,25 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <AxiosInterceptor>
 
-        <ToastContainer position="bottom-right" hideProgressBar />
+            <ToastContainer position="bottom-right" hideProgressBar />
 
-      <CssBaseline />
-      <Header onSetDarkMore={setDarkMore} darkMore={darkMore} />
-        <Container>
-          <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='catalog' element={<Catalog />} />
-            <Route path='catalog/:productId' element={<ProductDetail />} />
-            <Route path='about' element={<AboutPage />} />
-            <Route path='contact' element={<Contact />} />
-            <Route path='upload' element={<Uploader />} />
+          <CssBaseline />
+          <Header onSetDarkMore={setDarkMore} darkMore={darkMore} />
+            <Container>
+              <Routes>
+                <Route path='/' element={<HomePage />} />
+                <Route path='catalog' element={<Catalog />} />
+                <Route path='catalog/:productId' element={<ProductDetail />} />
+                <Route path='about' element={<AboutPage />} />
+                <Route path='contact' element={<Contact />} />
+              <Route path='upload' element={<Uploader />} />
+              <Route path='not-found' element={<NotFound />} />
 
-          </Routes>
-      </Container>
+              </Routes>
+              </Container>
+          </AxiosInterceptor>
       </ThemeProvider>
       
     </>
