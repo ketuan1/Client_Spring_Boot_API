@@ -7,14 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 function AxiosInterceptor(props: any) {
       //chuyen page -> use Hook useNavigate()
       const navigate = useNavigate();
+      const sleep = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
   useEffect(() => {
 
-    const sleep = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
-
-        async function interceptorToCheckError() {
+       // async function interceptorToCheckError() {
           const interceptor = axios.interceptors.response.use(async response => {
-            await sleep(1000);
+          //  await sleep(100);
                 return response;
               }, (error: AxiosError<any>) => {
                 console.log('interceptor run to get error msg');
@@ -35,15 +34,15 @@ function AxiosInterceptor(props: any) {
                     toast.error(error.response?.data.message, {theme: "dark"});
                     break;
                 }
-                return Promise.reject(error);
+                return Promise.reject(error.response);
             });
     
             return () => {
                 axios.interceptors.response.eject(interceptor);
             }
-        }
+      //  }
 
-        interceptorToCheckError();
+       // interceptorToCheckError();
     }, [navigate]);
 
     return props.children;

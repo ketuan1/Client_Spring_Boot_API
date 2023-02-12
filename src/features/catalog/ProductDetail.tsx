@@ -35,7 +35,7 @@ function ProductDetail() {
     return ( 
         <Grid container spacing={6}>
             <Grid item xs={4}>
-                <img src={`http://localhost:8080/api/file/image/${product?.imageUrl}`} alt={`$product?.name}`} style={{width: '100%'}}/>
+                <img src={`${process.env.REACT_APP_BASE_URL}file/image/${product?.imageUrl}`} alt={`$product?.name}`} style={{width: '100%'}}/>
             </Grid>
             <Grid item xs={8}>
                 <Typography variant="h3">{product?.name}</Typography>

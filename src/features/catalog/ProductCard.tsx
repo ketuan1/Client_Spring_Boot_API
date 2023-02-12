@@ -2,12 +2,29 @@ import {Avatar, Button,Card,CardActions,CardContent,CardHeader,CardMedia,Typogra
 import { red } from "@mui/material/colors";
 import { Product } from "../../model/product";
 import { Link } from 'react-router-dom';
+import axios, { AxiosResponse } from "axios";
+import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   product: Product;
 }
 
 function ProductCard(props: Props) {
+
+  //loading
+  const [loading, setLoading] = useState(false);
+
+  //function post data to API
+  function handleAddItem(productId: number) {
+    setLoading(true);
+    axios.post(`baskets?productId=${productId}&quantity=1`, {})
+      .then((response: AxiosResponse) => { console.log(response); })
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
+  };
+    
+    
   return (
     <>
       <Card>
@@ -35,7 +52,13 @@ function ProductCard(props: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to Cart</Button>
+          <LoadingButton
+            loading={loading}
+            size="small"
+            onClick={() => handleAddItem(props.product.id)}>
+            Add to Cart
+          </LoadingButton>
+          
         <Button size="small" component={Link} to={`/catalog/${props.product.id}`}>View</Button>
       </CardActions>
       </Card>

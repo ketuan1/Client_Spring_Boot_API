@@ -1,8 +1,7 @@
 import "./App.css";
 import Catalog from "../features/catalog/Catalog";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Header from "./Header";
-import { Container } from "@mui/system";
 import { useState } from "react";
 import HomePage from "../features/home/HomePage";
 import AboutPage from "../features/about/AboutPage";
@@ -13,6 +12,7 @@ import ProductDetail from "../features/catalog/ProductDetail";
 import { ToastContainer } from "react-toastify";
 import AxiosInterceptor from "../interceptor/AxiosInterceptor";
 import NotFound from "../features/error/NotFound";
+import BasketPage from "../features/basket/BasketPage";
 
 function App() {
 
@@ -42,6 +42,8 @@ function App() {
                 <Route path='contact' element={<Contact />} />
               <Route path='upload' element={<Uploader />} />
               <Route path='not-found' element={<NotFound />} />
+              <Route path='basket' element={<BasketPage />} />
+              <Route path='*' element={<NotFound />} />
 
               </Routes>
               </Container>
