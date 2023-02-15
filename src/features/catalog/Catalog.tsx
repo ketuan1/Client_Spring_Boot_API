@@ -18,12 +18,13 @@ function Catalog() {
     //fetch js core
     // fetch("http://localhost:8080/api/products")
     //   .then((response) => response.json())
-    //   .then((data) => setProducts(data));
+    //   .then((data) => setProducts(data))
     
     //axios fetch API
-    axios.get("products")
-      .then((response: AxiosResponse) => setProducts(response.data))
+        axios.get("products")
+        .then((response: AxiosResponse) => setProducts(response.data))
       .finally(() => setLoading(false));
+
   }, []);
 
   if (loading) {

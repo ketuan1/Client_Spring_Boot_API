@@ -2,7 +2,9 @@ import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Switch, Toolbar, Typography, ListItem, List, Box } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import IconButton from "@mui/material/IconButton";
+import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { StoreContext } from "../context/StoreContext";
 
 interface Props {
     darkMore: boolean;
@@ -10,6 +12,18 @@ interface Props {
 }
 
 function Header(props: Props) {
+
+    const { basket } = useContext(StoreContext);
+
+    //function counter basket
+    const itemCount = basket?.basketItems
+        .reduce((sum, item) => sum + item.quantity, 0);
+    
+    // var sum = 0;
+    // for (let i = 0; i < basket!.basketItems.length!; i++) {
+    //     sum = sum + basket!.basketItems[i].quantity;
+    //     return sum;
+    // }
 
     const midLinks = [
         { title: 'catalog', path: '/catalog' },
@@ -61,7 +75,7 @@ function Header(props: Props) {
 
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <IconButton component={Link} to='/basket' size="large" sx={{color: 'inherit'}}>
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={itemCount} color="secondary">
                         <ShoppingCart />
                         </Badge>
                     </IconButton>
