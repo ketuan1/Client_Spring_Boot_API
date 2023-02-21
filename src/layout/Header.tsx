@@ -17,13 +17,19 @@ function Header(props: Props) {
 
     //function counter basket
     const itemCount = basket?.basketItems
+        /**
+         * case: 1
+         *  var sum = 0;
+                 for (let i = 0; i < basket!.basketItems.length!; i++) {
+                     sum = sum + basket!.basketItems[i].quantity;
+                     const itemCount = sum;
+                 }
+         */
+        
+        //case: 2
         .reduce((sum, item) => sum + item.quantity, 0);
     
-    // var sum = 0;
-    // for (let i = 0; i < basket!.basketItems.length!; i++) {
-    //     sum = sum + basket!.basketItems[i].quantity;
-    //     return sum;
-    // }
+    
 
     const midLinks = [
         { title: 'catalog', path: '/catalog' },

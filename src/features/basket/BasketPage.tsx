@@ -1,47 +1,58 @@
-import { Delete } from '@mui/icons-material';
+import { AddCircle, Delete, RemoveCircle } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import axios, { AxiosResponse } from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 
-
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-  ) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
-
 function BasketPage() {
 
-  const {basket} = useContext(StoreContext);
-
-  //code old
-  //  const [basket, setBasket] = useState<Basket | null>(null);
-  //   loading
-  //  const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //       axios.get('baskets')
-  //           .then((response: AxiosResponse) => setBasket(response.data))
-  //           .catch(err => console.log(err))
-  //           .finally(() => setLoading(false));
-  //   }, []);
-  //   if (loading) {
-  //       return <LoadingComponent />
-  //   }
+  /**
+   * code old
+    const [basket, setBasket] = useState<Basket | null>(null);
+     loading
+    const [loading, setLoading] = useState(true);
+   useEffect(() => {
+         axios.get('baskets')
+             .then((response: AxiosResponse) => setBasket(response.data))
+             .catch(err => console.log(err))
+             .finally(() => setLoading(false));
+     }, []);
+     if (loading) {
+         return <LoadingComponent />
+     }
+   * 
+   */
   
+  const { basket, setBasket, removeItem } = useContext(StoreContext);
+  const [status, setStatus] = useState({
+    loading: false,
+    name: ''
+  });
 
+  //function
+  const handleAddItem = (productId: number, name: string) => {
+    setStatus({
+      loading: true,
+      name: name
+    });
+    axios.post(`baskets?productId=${productId}&quantity=1`, {})
+      .then((response: AxiosResponse) => setBasket(response.data))
+      .catch(err => console.error(err))
+    .finally(() => setStatus({loading: false, name}));
+  }
 
+  const handleRemoveItem = (productId: number, quantity: number, name: string) =>{
+    setStatus({
+      loading: true,
+      name: name
+    });
+    axios.delete(`baskets?productId=${productId}&quantity=${quantity}`)
+      .then(() => removeItem(productId, quantity))
+      .catch(err => console.error(err))
+      .finally(() => setStatus({loading: false, name}));
+  }
+  
     if (!basket) {
         return <Typography variant="h3">Basket empty</Typography>
     }
@@ -54,7 +65,7 @@ function BasketPage() {
           <TableRow>
             <TableCell>Product</TableCell>
             <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="center">Quantity</TableCell>
             <TableCell align="right">Subtotal</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
@@ -69,12 +80,29 @@ function BasketPage() {
                 {row.name}
               </TableCell>
               <TableCell align="right">$ {row.unitPrice}</TableCell>
-              <TableCell align="right">{row.quantity}</TableCell>
+
+              <TableCell align="center">
+
+                <LoadingButton
+                  loading={status.loading && status.name === 'add' + row.productId}
+                  color="secondary" onClick={() => handleAddItem(row.productId, 'add' + row.productId)}>
+                  <AddCircle />
+                </LoadingButton>
+                {row.quantity}
+
+                <LoadingButton
+                  loading={status.loading && status.name === 'remove' + row.productId}
+                  color="error" onClick={() => handleRemoveItem(row.productId, 1, 'remove'+row.productId)}>
+                  <RemoveCircle />
+                </LoadingButton>
+              </TableCell>
+
               <TableCell align="right">$ {(row.unitPrice*row.quantity).toFixed(2)}</TableCell>
                   <TableCell align="right">
-                      <IconButton color="error">
+                <LoadingButton loading={status.loading && status.name === 'delete' + row.productId}
+                  color="error" onClick={() => handleRemoveItem(row.productId, row.quantity, 'delete'+row.productId)}>
                           <Delete />
-                      </IconButton>
+                      </LoadingButton>
               </TableCell>
             </TableRow>
           ))}

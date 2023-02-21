@@ -31,7 +31,7 @@ function App() {
     palette: { mode: paletteType }
   });
 
-  //get info into basket
+  //get info into basket(API)
   useEffect(() => {
     //get cookie of buyerId
     const buyerId = getCookie('buyerId');
