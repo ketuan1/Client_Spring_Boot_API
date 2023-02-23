@@ -1,9 +1,10 @@
 import { AddCircle, Delete, RemoveCircle } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import {Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
+import BasketSummary from './BasketSummary';
 
 function BasketPage() {
 
@@ -108,7 +109,14 @@ function BasketPage() {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+        </TableContainer>
+        
+        <Grid>
+        <Grid item xs={6} />
+          <Grid item xs={6}/>
+          <BasketSummary />
+        </Grid>
+       
         </>
      );
 }
