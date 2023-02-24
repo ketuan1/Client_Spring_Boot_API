@@ -11,6 +11,7 @@ function ProductDetail() {
     //HOOK useParam
     let params = useParams();
 
+    //get info basket (StoreContext)
     const { basket, setBasket, removeItem } = useContext(StoreContext);
 
     const [product, setProduct] = useState<Product | null>(null);
@@ -18,45 +19,51 @@ function ProductDetail() {
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
-
+    //search basketItem in basket have productId === productId product details current
     const basketItem = basket?.basketItems.find(item => item.productId === product?.id);
+    //method quantity of product details current
     const [quantity, setQuantity] = useState(0);
+    //method update quantity product
     const [submitting, setSubmitting] = useState(false);
 
-    //axios
+    //axios load product details
     useEffect(() => {
         axios.get(`products/${params.productId}`)
             .then(response => {
                 setProduct(response.data);
-
+                //check basketItem !== null the setQuantity(basketItem.quantity)
                 if (basketItem) {
                     setQuantity(basketItem.quantity);
                 }
             }).catch(error => console.log(error))
                 .finally(() => setLoading(false));
-    }, [params.productId]);
+    }, [basketItem, params.productId]);
 
-    //
+    // function handler change input of quantity
     const handleInputChange = (event: any) => {
+        //check value >= 0 tránh trường hợp user nhập số âm vào
         if (event.target.value >= 0) {
             setQuantity(+event.target.value);
         }
     }
 
-    //
+    // function handle update Cart
     const handleUpdateCart = () => {
+        //set status is true
         setSubmitting(true);
+        // method update quantity into basket
         if (!basketItem || quantity > basketItem?.quantity) {
-            const updatedQuantity = basketItem ? - quantity - basketItem.quantity : quantity;
+            const updatedQuantity = basketItem?quantity - basketItem.quantity : quantity;
             axios.post(`baskets?productId=${product?.id}&quantity=${updatedQuantity}`, {})
                 .then((response: AxiosResponse) => setBasket(response.data))
                 .catch((err => console.log(err)))
                 .finally(() => setSubmitting(false));
-        }else{
+        } else {
+            // method remove item basket
             const updatedQuantity = basketItem.quantity - quantity;
             axios.delete(`baskets?productId=${product?.id}&quantity=${updatedQuantity}`)
-                .then((response: AxiosResponse) => setBasket(response.data))
-                .catch((err => console.error(err)))
+                .then(() => removeItem(product?.id!, updatedQuantity))
+                .catch((err => console.log(err)))
                 .finally(() => setSubmitting(false));
         }
     }
@@ -105,6 +112,7 @@ function ProductDetail() {
                     </Table>
                 </TableContainer>
             </Grid>
+            {/* input of basket */}
             <Grid container>
                 <Grid item xs={6}>
                     <TextField
@@ -113,11 +121,13 @@ function ProductDetail() {
                         type="number"
                         label="Quantity in Car"
                         fullWidth
+                        // quantity khi load product len
                         value={quantity}
                     />
                     <Grid item xs={6}>
                         <LoadingButton
                             disabled={basketItem?.quantity === quantity || (!basketItem && quantity === 0)}
+                            loading={submitting}
                             onClick={handleUpdateCart}
                             sx={{ height: '55px' }}
                             color="primary"
@@ -125,6 +135,7 @@ function ProductDetail() {
                             variant="contained"
                             fullWidth
                         >
+                            {/* check basket item if have value the "update quantity", if not have basket the "add to Cart" */}
                             {basketItem ? 'Updated Quantity' : 'Add to Cart'}
 
                         </LoadingButton>
