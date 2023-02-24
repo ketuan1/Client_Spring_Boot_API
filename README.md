@@ -9,3 +9,5 @@
 # npm i react-toastify
 
 # npm i @mui/lab
+
+# npm install @reduxjs/toolkit react-redux

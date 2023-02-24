@@ -1,8 +1,9 @@
 import { AddCircle, Delete, RemoveCircle } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import {Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import {Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import BasketSummary from './BasketSummary';
 
@@ -31,7 +32,7 @@ function BasketPage() {
     name: ''
   });
 
-  //function
+  //function Add item basket
   const handleAddItem = (productId: number, name: string) => {
     setStatus({
       loading: true,
@@ -43,7 +44,8 @@ function BasketPage() {
     .finally(() => setStatus({loading: false, name}));
   }
 
-  const handleRemoveItem = (productId: number, quantity: number, name: string) =>{
+  //function Remove item Basket and Delete all Basket
+  const handleRemoveItem = (productId: number, quantity: number, name: string) => {
     setStatus({
       loading: true,
       name: name
@@ -65,6 +67,7 @@ function BasketPage() {
         <TableHead>
           <TableRow>
             <TableCell>Product</TableCell>
+            <TableCell>Image</TableCell>
             <TableCell align="right">Price</TableCell>
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="right">Subtotal</TableCell>
@@ -80,24 +83,31 @@ function BasketPage() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
+              <TableCell component="th" scope="row">
+                {row.imageUrl}
+              </TableCell>
               <TableCell align="right">$ {row.unitPrice}</TableCell>
-
+             
               <TableCell align="center">
 
+              {/* Button Add */}
                 <LoadingButton
                   loading={status.loading && status.name === 'add' + row.productId}
                   color="secondary" onClick={() => handleAddItem(row.productId, 'add' + row.productId)}>
                   <AddCircle />
                 </LoadingButton>
+                {/* row. quantity */}
                 {row.quantity}
 
+              {/* Button Remove */}
                 <LoadingButton
                   loading={status.loading && status.name === 'remove' + row.productId}
                   color="error" onClick={() => handleRemoveItem(row.productId, 1, 'remove'+row.productId)}>
                   <RemoveCircle />
                 </LoadingButton>
-              </TableCell>
 
+              </TableCell>
+          
               <TableCell align="right">$ {(row.unitPrice*row.quantity).toFixed(2)}</TableCell>
                   <TableCell align="right">
                 <LoadingButton loading={status.loading && status.name === 'delete' + row.productId}
@@ -111,10 +121,20 @@ function BasketPage() {
       </Table>
         </TableContainer>
         
-        <Grid>
+        <Grid container>
         <Grid item xs={6} />
           <Grid item xs={6}/>
           <BasketSummary />
+          
+          <Button
+            component={Link}
+            to='/checkout'
+            variant='contained'
+            size='large'
+            fullWidth
+          >
+            Check out
+          </Button>
         </Grid>
        
         </>
