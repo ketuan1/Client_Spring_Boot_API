@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StoreProvider from './context/StoreProvide';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 //SETTING URL for API
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
@@ -39,11 +41,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <Provider store={store}>
     <BrowserRouter>
       <StoreProvider>
       <App />
       </StoreProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+      </Provider>
   </React.StrictMode>
 );
 
