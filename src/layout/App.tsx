@@ -18,6 +18,8 @@ import axios, { AxiosResponse } from "axios";
 import { StoreContext } from "../context/StoreContext";
 import LoadingComponent from "./Loading";
 import CheckoutPage from "../features/checkout/CheckoutPage";
+import { setBasketReducer } from "../features/basket/BasketSlice";
+import { store } from "../store";
 
 function App() {
 
@@ -40,7 +42,9 @@ function App() {
       setLoading(true)
       axios.get('baskets')
         .then((response: AxiosResponse) => {
-          setBasket(response.data);
+          //code old
+         // setBasket(response.data);
+          store.dispatch(setBasketReducer(response.data))
         console.log(response.data);
         }).catch(err => console.log(err))
         .finally(() => setLoading(false));
