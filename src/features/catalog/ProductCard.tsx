@@ -6,6 +6,8 @@ import axios, { AxiosResponse } from "axios";
 import { useContext, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { StoreContext } from "../../context/StoreContext";
+import { setBasketReducer } from "../basket/BasketSlice";
+import { store } from "../../store";
 
 interface Props {
   product: Product;
@@ -15,21 +17,17 @@ function ProductCard(props: Props) {
 
   //loading
   const [loading, setLoading] = useState(false);
-    //
-  const { setBasket } = useContext(StoreContext);
-
+  //const { setBasket } = useContext(StoreContext);
 
  // function(add item basket) post data to API by axios
   function handleAddItem(productId: number) {
-  
     setLoading(true);
     axios.post(`baskets?productId=${productId}&quantity=1`, {})
-      .then((response: AxiosResponse) => setBasket(response.data))
+     // .then((response: AxiosResponse) => setBasket(response.data))
+      .then((response: AxiosResponse) => store.dispatch(setBasketReducer(response.data)))
       .catch(err => console.log(err))
       .finally(() => setLoading(false));
-    
   };
- 
     
   return (
     <>

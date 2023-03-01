@@ -2,17 +2,23 @@ import { LoadingButton } from "@mui/lab";
 import { Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import axios, { AxiosResponse } from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 import LoadingComponent from "../../layout/Loading";
+import { BasketItem } from "../../model/basket";
 import { Product } from "../../model/product";
+import { store } from "../../store";
+import { removeItemReducer, setBasketReducer } from "../basket/BasketSlice";
 
 function ProductDetail() {
     //HOOK useParam
     let params = useParams();
 
     //get info basket (StoreContext)
-    const { basket, setBasket, removeItem } = useContext(StoreContext);
+   // const { basket, setBasket, removeItem } = useContext(StoreContext);
+    
+    const { basket } = useSelector((state: any) => state.basket);
 
     const [product, setProduct] = useState<Product | null>(null);
     //loading network
@@ -20,7 +26,7 @@ function ProductDetail() {
 
     const navigate = useNavigate();
     //search basketItem in basket have productId === productId product details current
-    const basketItem = basket?.basketItems.find(item => item.productId === product?.id);
+    const basketItem = basket?.basketItems.find((item: BasketItem) => item.productId === product?.id);
     //method quantity of product details current
     const [quantity, setQuantity] = useState(0);
     //method update quantity product
@@ -55,14 +61,14 @@ function ProductDetail() {
         if (!basketItem || quantity > basketItem?.quantity) {
             const updatedQuantity = basketItem?quantity - basketItem.quantity : quantity;
             axios.post(`baskets?productId=${product?.id}&quantity=${updatedQuantity}`, {})
-                .then((response: AxiosResponse) => setBasket(response.data))
+                .then((response: AxiosResponse) => store.dispatch(setBasketReducer(response.data)))
                 .catch((err => console.log(err)))
                 .finally(() => setSubmitting(false));
         } else {
             // method remove item basket
             const updatedQuantity = basketItem.quantity - quantity;
             axios.delete(`baskets?productId=${product?.id}&quantity=${updatedQuantity}`)
-                .then(() => removeItem(product?.id!, updatedQuantity))
+                .then(() => store.dispatch(removeItemReducer({ productId: product?.id!, quantity: updatedQuantity })))
                 .catch((err => console.log(err)))
                 .finally(() => setSubmitting(false));
         }

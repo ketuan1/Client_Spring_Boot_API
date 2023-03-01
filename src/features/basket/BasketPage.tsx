@@ -2,9 +2,12 @@ import { AddCircle, Delete, RemoveCircle } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { StoreContext } from '../../context/StoreContext';
+import { BasketItem } from '../../model/basket';
+import { store } from '../../store';
+import { removeItemReducer, setBasketReducer } from './BasketSlice';
 import BasketSummary from './BasketSummary';
 
 function BasketPage() {
@@ -26,7 +29,8 @@ function BasketPage() {
    * 
    */
   
-  const { basket, setBasket, removeItem } = useContext(StoreContext);
+ // const { basket, setBasket, removeItem } = useContext(StoreContext);
+  const { basket } = useSelector((state: any) => state.basket);
   const [status, setStatus] = useState({
     loading: false,
     name: ''
@@ -38,8 +42,9 @@ function BasketPage() {
       loading: true,
       name: name
     });
+    
     axios.post(`baskets?productId=${productId}&quantity=1`, {})
-      .then((response: AxiosResponse) => setBasket(response.data))
+      .then((response: AxiosResponse) => store.dispatch(setBasketReducer(response.data)))
       .catch(err => console.error(err))
     .finally(() => setStatus({loading: false, name}));
   }
@@ -51,7 +56,7 @@ function BasketPage() {
       name: name
     });
     axios.delete(`baskets?productId=${productId}&quantity=${quantity}`)
-      .then(() => removeItem(productId, quantity))
+      .then(() => store.dispatch(removeItemReducer(({productId, quantity}))))
       .catch(err => console.error(err))
       .finally(() => setStatus({loading: false, name}));
   }
@@ -75,7 +80,7 @@ function BasketPage() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {basket.basketItems.map((row) => (
+          {basket.basketItems.map((row: BasketItem) => (
             <TableRow
               key={row.productId}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
